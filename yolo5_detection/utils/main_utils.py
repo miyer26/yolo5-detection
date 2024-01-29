@@ -13,7 +13,7 @@ def read_yaml_file(file_path: str) -> dict:
             return yaml.safe_load(yaml_file)
 
     except Exception as e:
-        raise AppException(e, sys) from e 
+        raise AppException(e, sys) from e
 
 
 
@@ -31,4 +31,14 @@ def write_yaml_file(file_path: str, content: object, replace: bool = False) -> N
 
     except Exception as e:
         raise AppException(e, sys)
-    
+
+def decodeImage(imgstring, fileName):
+    imgdata = base64.b64decode(imgstring)
+    with open("./data/" + fileName, 'wb') as f:
+        f.write(imgdata)
+        f.close()
+
+
+def encodeImageIntoBase64(croppedImagePath):
+    with open(croppedImagePath, "rb") as f:
+        return base64.b64encode(f.read())
