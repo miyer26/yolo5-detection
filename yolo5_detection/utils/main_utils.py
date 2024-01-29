@@ -1,6 +1,7 @@
 import os.path
 import sys
 import yaml
+import base64
 
 from yolo5_detection.exception import AppException
 from yolo5_detection.logger import logging
