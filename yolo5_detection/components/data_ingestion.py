@@ -37,8 +37,7 @@ class DataIngestion:
         
         except Exception as e:
             raise AppException(e, sys)
-        
-    
+
     def extract_zip_file(self, zip_file_path: str) -> str:
         """
         Function to zip file
@@ -57,7 +56,7 @@ class DataIngestion:
             return data_store_path
         except Exception as e:
             raise AppException(e, sys)
-   
+
     def initate_data_ingestion(self) -> DataIngestionArtifact:
         logging.info("Initiating data_ingestion method")
         try:
@@ -73,7 +72,7 @@ class DataIngestion:
             logging.info(f"Data ingestion artifact: {data_ingestion_artifact}")
 
             return data_ingestion_artifact
-    
+
         except Exception as e:
             raise AppException(e, sys)
 
