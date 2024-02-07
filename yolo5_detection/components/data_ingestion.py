@@ -2,6 +2,7 @@ import os
 import sys
 import zipfile
 import gdown
+import yaml
 from yolo5_detection.logger import logging
 from yolo5_detection.exception import AppException
 from yolo5_detection.entity.config_entity import DataIngestionConfig
@@ -56,12 +57,44 @@ class DataIngestion:
             return data_store_path
         except Exception as e:
             raise AppException(e, sys)
+    
+    def modify_data_yaml(self, data_store_path: str) -> None:
+        """
+        Function to modify train, test, and validation fields in data.yaml
+
+        Args:
+            data_store_path (str): Path to the directory where data.yaml is located.
+            train_path (str): New path for the train field.
+            test_path (str): New path for the test field.
+            validation_path (str): New path for the validation field.
+        """
+        try:
+            yaml_file_path = os.path.join(data_store_path, 'data.yaml')
+
+            with open(yaml_file_path, 'r') as yaml_file:
+                data = yaml.safe_load(yaml_file)
+
+            # Modify the train, test, and validation fields
+            data['train'] = os.path.join("..", data_store_path, 'train', 'images')
+            data['test'] = os.path.join("..", data_store_path, 'test', 'images')
+            data['val'] = os.path.join("..", data_store_path, 'valid', 'images')
+
+            # Write the modified data back to the YAML file
+            with open(yaml_file_path, 'w') as yaml_file:
+                yaml.dump(data, yaml_file)
+
+            logging.info(f"Modified data.yaml in dir: {data_store_path}")
+
+        except Exception as e:
+            raise AppException(e, sys)
+
 
     def initate_data_ingestion(self) -> DataIngestionArtifact:
         logging.info("Initiating data_ingestion method")
         try:
             zip_file_path = self.download_data()
             data_store_path = self.extract_zip_file(zip_file_path)
+            self.modify_data_yaml(data_store_path)
 
             data_ingestion_artifact = DataIngestionArtifact(
                 data_zip_file_path = zip_file_path,

@@ -35,3 +35,16 @@ class DataValidationConfig:
     )
 
     required_files_list : List[str] = field(default_factory=lambda: DATA_VALIDATION_ALL_REQUIRED_FILES)
+
+
+@dataclass
+class ModelTrainerConfig:
+    model_trainer_dir: str = os.path.join(
+        training_pipeline_config.artifacts_dir, MODEL_TRAINER_DIR_NAME
+    )
+
+    weight_name = MODEL_TRAINER_PRETRAINED_WEIGHT_NAME
+
+    no_epochs = MODEL_TRAINER_NUMBER_OF_EPOCHS
+
+    batch_size = MODEL_TRAINER_BATCH_SIZE
